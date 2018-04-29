@@ -1,0 +1,23 @@
+{
+  "name": "realize_es6_character",
+  "version": "1.0.0",
+  "description": "",
+  "main": "realizePromise.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pftom/realize_es6_character.git"
+  },
+  "keywords": [],
+  "author": "pftom <1043269994@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pftom/realize_es6_character/issues"
+  },
+  "homepage": "https://github.com/pftom/realize_es6_character#readme",
+  "dependencies": {
+    "appoint": "^1.1.1"
+  }
+}
