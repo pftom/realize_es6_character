@@ -120,6 +120,97 @@ function QueueItem(promise, onFulfilled, onRejected) {
   }
 }
 
+function resolve(value) {
+  if (value instanceof this) {
+    return value;
+  }
+
+  return doResolve(new this(INTERNAL), value);
+}
+
+function reject(reason) {
+  return doReject(new this(INTERNAL), reason);
+}
+
+function all(iterable) {
+  const self = this;
+  if (!isArray(iterable)) {
+    return this.reject(new TypeError('must be an array'));
+  }
+
+  const len = iterable.length;
+  let called = false;
+
+  if (!len) {
+    return this.resolve([]);
+  }
+
+  const values = new Array(len);
+  let resolved = 0;
+  let i = -1;
+  const promise = new this(INTERNAL);
+
+  while (++i < len) {
+    allResolver(iterable[i], i);
+  }
+
+  return promise;
+
+  function allResolver(value, i) {
+    self.resolve(value).then(resolveFromAll, function (error) {
+      if (!called) {
+        called = true;
+        doReject(promise, error);
+      }
+    });
+
+    function resolveFromAll(outValue) {
+      values[i] = outValue;
+      if (++resolved == len && !called) {
+        called = true;
+        doResolve(promise, values);
+      }
+    }
+  }
+}
+
+function race(iterable) {
+  const self = this;
+  if (!isArray(iterable)) {
+    return this.reject(new TypeError('must be an array'));
+  }
+
+  const len = iterable.length;
+  let called = false;
+
+  if (!len) {
+    return this.resolve([]);
+  }
+
+  let i = -1;
+  const promise = new this(INTERNAL);
+
+  while (++i < len) {
+    resolver(iterable[i]);
+  }
+
+  return promise;
+
+  function resolver(value) {
+    self.resolve(value).then(function (response) {
+      if (!called) {
+        called = true;
+        doResolve(promise, response);
+      }
+    }, function (error) {
+      if (!called) {
+        called = true;
+        doReject(promise, error);
+      }
+    })
+  }
+}
+
 const PENDING = 'pending';
 const FULFILLED = 'fulfilled';
 const REJECTED = 'rejected';
@@ -158,3 +249,8 @@ Promise.prototype.then = function (onFulfilled, onRejected) {
 Promise.prototype.catch = function (onRejected) {
   return this.then(null, onRejected);
 };
+
+Promise.resolve = resolve;
+Promise.reject = reject;
+Promise.all = all;
+Promise.race = race;
