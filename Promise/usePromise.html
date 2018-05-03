@@ -58,7 +58,11 @@
       return promise;
     }
 
-    getJSON('')
+    getJSON('http://file.ituring.com.cn/SmallCover/1804727b57da570cba4f').then(function (json) {
+      console.log('Contents: ' + json);
+    }, function (error) {
+      console.error(error);
+    });
   </script>
 </body>
 </html>

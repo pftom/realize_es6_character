@@ -18,3 +18,12 @@ promise.then(function () {
 });
 
 console.log('Hi');
+
+// for async flow
+getJSON('/post/1.json').then(function (post) {
+  return getJSON(post.commentURL);
+}).then(function funcA(comments) {
+  console.log('resolved: ', comments);
+}, function funcB(err) {
+  console.log('rejected: ', err);
+});
