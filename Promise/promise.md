@@ -118,8 +118,14 @@ Promise.reject(3).finally(() => {}) // reject 的值是 3
 
 
 
+### 
+
 
 
 ### 关于几大函数的执行顺序
 
 `setTimeout` , `setImmediate` , `setInterval` , `Promise` , `nextTick` , 同步代码
+
+- 同步代码在本轮事件循环中执行
+- Promise 在本轮事件循环结束时执行
+- setTimeout 在下一轮 ”事件循环“ 开始时执行
