@@ -2,7 +2,7 @@ Promise 是异步编程的一种解决方案，比传统的解决方案 — 回�
 
 `Promise`对象有以下两个特点：
 
-- ​
+- ​更好的错误处理（better error handling）
 
 
 
@@ -89,6 +89,10 @@ getJSON('/post/1.json').then(function (post) {
 ```
 
 上面代码中，一共有三个 Promise 对象：一个由`getJSON`产生，两个由`then`产生。它们之中任何一个抛出的错误，都会被最后一个`catch`捕获。
+
+
+
+`catch` 既能捕捉异步错误，也能捕捉同步错误。
 
 ### Promise.prototype.finally
 
